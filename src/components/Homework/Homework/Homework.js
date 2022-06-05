@@ -82,23 +82,24 @@ const List = styled.div`
     border: 1px
         ${props => (props.isDraggingOver ? 'dashed #000' : 'solid #ddd')};
     background: #fff;
-    padding: 0.5rem 0.5rem 0;
+    color: #31C75A;
+    padding: 1.5rem;
     border-radius: 3px;
     flex: 0 0 150px;
-    font-family: sans-serif;
+    width: 35rem;
+    font-family: poppins;
+    font-weight: 600;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.7);
+    border-radius: 15px;
 `;
 
 const Kiosk = styled(List)`
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 200px;
+    width: 25rem;
 `;
 
 const Container = styled(List)`
     margin: 0.5rem 0.5rem 1.5rem;
-    background: #ccc;
+    background: white;
 `;
 
 const Notice = styled.div`
@@ -120,11 +121,12 @@ const Button = styled.button`
     justify-content: center;
     margin: 0.5rem;
     padding: 0.5rem;
-    color: #000;
+    color: white;
     border: 1px solid #ddd;
-    background: #fff;
-    border-radius: 3px;
+    background: #31C75A;
+    border-radius: 5px;
     font-size: 1rem;
+    font-family: poppins;
     cursor: pointer;
 `;
 
@@ -135,19 +137,31 @@ const ButtonText = styled.div`
 const ITEMS = [
     {
         id: uuidv4(),
-        content: <input className='field' type="text" />
+        content: <input className='field' type="text" placeholder='Text Field' />
     },
     {
         id: uuidv4(),
-        content: 'Copy'
+        content: <textarea className='field' name="textarea" placeholder='Text Area' cols="30" rows="5"></textarea>
     },
     {
         id: uuidv4(),
-        content: 'Image'
+        content:
+            <div>
+                <input type="checkbox" value="Add Item" name="add-item" /> <input className='checkbox-input' type="text" />
+                <button className='add-item'>+</button>
+            </div>
     },
     {
         id: uuidv4(),
-        content: 'Slideshow'
+        content:
+            <div>
+                <input type="radio" value="Add Item" name="add-item" /> <input className='radio-input' type="text" />
+                <button className='add-item'>+</button>
+            </div>
+    },
+    {
+        id: uuidv4(),
+        content: <input className='field' type="file" name="file" />
     },
     {
         id: uuidv4(),
@@ -210,113 +224,116 @@ class Homework extends Component {
     // But in this example everything is just done in one place for simplicity
     render() {
         return (
-            <DragDropContext onDragEnd={this.onDragEnd}>
-                <Droppable droppableId="ITEMS" isDropDisabled={true}>
-                    {(provided, snapshot) => (
-                        <Kiosk
-                            ref={provided.innerRef}
-                            isDraggingOver={snapshot.isDraggingOver}>
-                            {ITEMS.map((item, index) => (
-                                <Draggable
-                                    key={item.id}
-                                    draggableId={item.id}
-                                    index={index}>
+            <div className='main'>
+                <DragDropContext onDragEnd={this.onDragEnd}>
+                    <Content>
+                        <Button onClick={this.addList}>
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path
+                                    fill="currentColor"
+                                    d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                                />
+                            </svg>
+                            <ButtonText>Add List</ButtonText>
+                        </Button>
+                        {Object.keys(this.state).map((list, i) => {
+                            console.log('==> list', list);
+                            return (
+                                <Droppable key={list} droppableId={list}>
                                     {(provided, snapshot) => (
-                                        <React.Fragment>
-                                            <Item
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
-                                                isDragging={snapshot.isDragging}
-                                                style={
-                                                    provided.draggableProps
-                                                        .style
-                                                }>
-                                                {item.content}
-                                            </Item>
-                                            {snapshot.isDragging && (
-                                                <Clone>{item.content}</Clone>
-                                            )}
-                                        </React.Fragment>
-                                    )}
-                                </Draggable>
-                            ))}
-                        </Kiosk>
-                    )}
-                </Droppable>
-                <Content>
-                    <Button onClick={this.addList}>
-                        <svg width="24" height="24" viewBox="0 0 24 24">
-                            <path
-                                fill="currentColor"
-                                d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
-                            />
-                        </svg>
-                        <ButtonText>Add List</ButtonText>
-                    </Button>
-                    {Object.keys(this.state).map((list, i) => {
-                        console.log('==> list', list);
-                        return (
-                            <Droppable key={list} droppableId={list}>
-                                {(provided, snapshot) => (
-                                    <Container
-                                        ref={provided.innerRef}
-                                        isDraggingOver={
-                                            snapshot.isDraggingOver
-                                        }>
-                                        {this.state[list].length
-                                            ? this.state[list].map(
-                                                (item, index) => (
-                                                    <Draggable
-                                                        key={item.id}
-                                                        draggableId={item.id}
-                                                        index={index}>
-                                                        {(
-                                                            provided,
-                                                            snapshot
-                                                        ) => (
-                                                            <Item
-                                                                ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                isDragging={
-                                                                    snapshot.isDragging
-                                                                }
-                                                                style={
-                                                                    provided
-                                                                        .draggableProps
-                                                                        .style
-                                                                }>
-                                                                <Handle
-                                                                    {...provided.dragHandleProps}>
-                                                                    <svg
-                                                                        width="24"
-                                                                        height="24"
-                                                                        viewBox="0 0 24 24">
-                                                                        <path
-                                                                            fill="currentColor"
-                                                                            d="M3,15H21V13H3V15M3,19H21V17H3V19M3,11H21V9H3V11M3,5V7H21V5H3Z"
-                                                                        />
-                                                                    </svg>
-                                                                </Handle>
-                                                                {item.content}
-                                                            </Item>
-                                                        )}
-                                                    </Draggable>
+                                        <Container
+                                            ref={provided.innerRef}
+                                            isDraggingOver={
+                                                snapshot.isDraggingOver
+                                            }>
+                                            {this.state[list].length
+                                                ? this.state[list].map(
+                                                    (item, index) => (
+                                                        <Draggable
+                                                            key={item.id}
+                                                            draggableId={item.id}
+                                                            index={index}>
+                                                            {(
+                                                                provided,
+                                                                snapshot
+                                                            ) => (
+                                                                <Item
+                                                                    ref={provided.innerRef}
+                                                                    {...provided.draggableProps}
+                                                                    isDragging={
+                                                                        snapshot.isDragging
+                                                                    }
+                                                                    style={
+                                                                        provided
+                                                                            .draggableProps
+                                                                            .style
+                                                                    }>
+                                                                    <Handle
+                                                                        {...provided.dragHandleProps}>
+                                                                        <svg
+                                                                            width="24"
+                                                                            height="24"
+                                                                            viewBox="0 0 24 24">
+                                                                            <path
+                                                                                fill="currentColor"
+                                                                                d="M3,15H21V13H3V15M3,19H21V17H3V19M3,11H21V9H3V11M3,5V7H21V5H3Z"
+                                                                            />
+                                                                        </svg>
+                                                                    </Handle>
+                                                                    {item.content}
+                                                                </Item>
+                                                            )}
+                                                        </Draggable>
+                                                    )
                                                 )
-                                            )
-                                            : !provided.placeholder && (
-                                                <Notice>
-                                                    Drop items here
-                                                </Notice>
-                                            )}
-                                        {provided.placeholder}
-                                    </Container>
-                                )}
-                            </Droppable>
-                        );
-                    })}
-                </Content>
-            </DragDropContext>
+                                                : !provided.placeholder && (
+                                                    <Notice>
+                                                        Drop items here
+                                                    </Notice>
+                                                )}
+                                            {provided.placeholder}
+                                        </Container>
+                                    )}
+                                </Droppable>
+                            );
+                        })}
+                    </Content>
+                    <Droppable droppableId="ITEMS" isDropDisabled={true}>
+                        {(provided, snapshot) => (
+                            <Kiosk
+                                ref={provided.innerRef}
+                                isDraggingOver={snapshot.isDraggingOver}>
+                                {ITEMS.map((item, index) => (
+                                    <Draggable
+                                        key={item.id}
+                                        draggableId={item.id}
+                                        index={index}>
+                                        {(provided, snapshot) => (
+                                            <React.Fragment>
+                                                <Item
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    isDragging={snapshot.isDragging}
+                                                    style={
+                                                        provided.draggableProps
+                                                            .style
+                                                    }>
+                                                    {item.content}
+                                                </Item>
+                                                {snapshot.isDragging && (
+                                                    <Clone>{item.content}</Clone>
+                                                )}
+                                            </React.Fragment>
+                                        )}
+                                    </Draggable>
+                                ))}
+                            </Kiosk>
+                        )}
+                    </Droppable>
+                    <Button id='submit-btn'>Submit</Button>
+                </DragDropContext>
+            </div>
         );
     }
 }

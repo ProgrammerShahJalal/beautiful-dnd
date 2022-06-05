@@ -1,3 +1,59 @@
+.main {
+    margin: 2rem 10rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: space-between;
+    align-items: center;
+}
+
 .field {
-    padding: 10px 20px;
+    padding: 10px;
+    outline: 0;
+    width: 100%;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.radio-input {
+    padding: 10px;
+    outline: 0;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.checkbox-input {
+    padding: 10px;
+    outline: 0;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.add-item {
+    font-size: 20px;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 12px 18px;
+    color: white;
+    background-color: #31C75A;
+}
+
+#submit-btn {
+    width: 150px;
+}
+
+/* =====Responsive====== */
+@media screen and (max-width: 992px) {
+    .main {
+        margin: 5px 25px;
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        justify-content: space-between;
+        align-items: center;
+    }
 }
